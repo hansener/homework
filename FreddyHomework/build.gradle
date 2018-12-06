@@ -1,13 +1,19 @@
 buildscript {
-	ext {
-		springBootVersion = '2.1.1.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
+   ext {
+      springBootVersion = '2.1.0.RELEASE'
+   }
+
+   repositories {
+      jcenter()
+   }
+
+   dependencies {
+      classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+   }
+}
+
+task wrapper(type: Wrapper) {
+   gradleVersion = "4.7"
 }
 
 apply plugin: 'java'
@@ -16,23 +22,44 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'war'
 
-group = 'com.example'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = 1.8
+group = 'com.homework'
+compileJava.options.encoding = 'UTF-8'
+// version = '0.0.1-SNAPSHOT'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+war { 
+   enabled = true
+   archiveName "ROOT.war"
+}
+
+eclipse {
+    project.natures "org.springsource.ide.eclipse.gradle.core.nature"
+    wtp {
+        facet {
+            facet name: 'jst.web', version: '3.0'
+            facet name: 'jst.java', version: '1.8'
+        }
+    }
+}
 
 repositories {
-	mavenCentral()
+   jcenter()
 }
 
 configurations {
-	providedRuntime
+   providedRuntime
 }
 
 dependencies {
-	//implementation('org.springframework.boot:spring-boot-starter-jdbc')
-	implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
-	implementation('org.springframework.boot:spring-boot-starter-web')
-	//implementation('org.mybatis.spring.boot:mybatis-spring-boot-starter:1.3.2')
-	providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
-	testImplementation('org.springframework.boot:spring-boot-starter-test')
+   compileOnly "org.projectlombok:lombok:1.16.18"
+   //implementation('org.springframework.boot:spring-boot-starter-jdbc')
+   //implementation('org.mybatis.spring.boot:mybatis-spring-boot-starter:1.3.0')
+   //implementation("org.mariadb.jdbc:mariadb-java-client")
+   implementation("org.springframework.boot:spring-boot-devtools")
+   implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
+   implementation('org.springframework.boot:spring-boot-starter-web')
+   providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
+   testImplementation('org.springframework.boot:spring-boot-starter-test')
 }
